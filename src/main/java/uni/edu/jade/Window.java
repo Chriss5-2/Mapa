@@ -4,6 +4,8 @@ import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 
+import uni.edu.core.Map;
+
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
@@ -29,13 +31,15 @@ public class Window {
 	}
 
 	public void Run(){
+		Map map = Map.Get();
+		map.generateMap();
+		map.PrintMap();
 		System.out.println("GLFW " + Version.getVersion() + "!");
-
-		Init(); //initial configuration
+		Init(this.width, this.height, this.tittle); //initial configuration
 		Loop(); // loop
 	}
 
-	public void Init(){
+	public void Init(int width, int height, String title){
 		//Error callback
 		GLFWErrorCallback.createPrint(System.err).set();
 
@@ -73,7 +77,7 @@ public class Window {
 			// poll events
 			glfwPollEvents();
 
-			glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
+			glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // color del fondo
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			glfwSwapBuffers(glfwWindow);
