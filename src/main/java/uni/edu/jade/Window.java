@@ -4,7 +4,7 @@ import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 
-import uni.edu.core.Map;
+import uni.edu.core.wfcAlgorithm.Map;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.glfw.GLFW.*;
@@ -35,8 +35,8 @@ public class Window {
 		map.generateMap();
 		map.PrintMap();
 		System.out.println("GLFW " + Version.getVersion() + "!");
-		Init(this.width, this.height, this.tittle); //initial configuration
-		Loop(); // loop
+		//Init(this.width, this.height, this.tittle); //initial configuration
+		//Loop(); // loop
 	}
 
 	public void Init(int width, int height, String title){
