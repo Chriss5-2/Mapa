@@ -194,4 +194,16 @@ public class Map {
 		}
 	}
 
+	public ArrayList<Room> GetRooms(){
+		return rooms;
+	}
+
+	public int GetRows(){
+		return rows;
+	}
+
+	public int GetCollumns(){
+		return columns;
+	}
+
 }

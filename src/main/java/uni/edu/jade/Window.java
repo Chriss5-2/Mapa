@@ -1,16 +1,40 @@
 package uni.edu.jade;
 
+import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
+import static org.lwjgl.glfw.GLFW.GLFW_FALSE;
+import static org.lwjgl.glfw.GLFW.GLFW_MAXIMIZED;
+import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
+import static org.lwjgl.glfw.GLFW.GLFW_VISIBLE;
+import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
+import static org.lwjgl.glfw.GLFW.glfwDefaultWindowHints;
+import static org.lwjgl.glfw.GLFW.glfwDestroyWindow;
+import static org.lwjgl.glfw.GLFW.glfwInit;
+import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
+import static org.lwjgl.glfw.GLFW.glfwPollEvents;
+import static org.lwjgl.glfw.GLFW.glfwSetErrorCallback;
+import static org.lwjgl.glfw.GLFW.glfwShowWindow;
+import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
+import static org.lwjgl.glfw.GLFW.glfwSwapInterval;
+import static org.lwjgl.glfw.GLFW.glfwTerminate;
+import static org.lwjgl.glfw.GLFW.glfwWindowHint;
+import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.glClear;
+import static org.lwjgl.opengl.GL11.glClearColor;
+import static org.lwjgl.system.MemoryUtil.NULL;
+
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 
 import uni.edu.core.wfcAlgorithm.Map;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.system.MemoryUtil.NULL;
-
 public class Window {
+	public final int CELL_SIDE_SIZE_SMALL = 30;
+	public final int CELL_SIDE_SIZE_MEDIUM = 60;
+	public final int CELL_SIDE_SIZE_LARGE = 120;
+
+	private Map map;
 	private int width, height;
 	private String tittle;
 	private long glfwWindow;
@@ -18,6 +42,7 @@ public class Window {
 	private static Window window = null;
 
 	private Window(){
+		//map = Map.Get();
 		this.width = 1280;
 		this.height = 720;
 		this.tittle = "Map generation";
@@ -29,14 +54,18 @@ public class Window {
 		}
 		return Window.window;
 	}
-
+	
 	public void Run(){
-		Map map = Map.Get();
-		map.generateMap();
-		map.PrintMap();
 		System.out.println("GLFW " + Version.getVersion() + "!");
-		//Init(this.width, this.height, this.tittle); //initial configuration
-		//Loop(); // loop
+		Init(this.width, this.height, this.tittle); //initial configuration
+		Loop(); // loop
+
+		//free the memory
+		glfwFreeCallbacks(glfwWindow);
+		glfwDestroyWindow(glfwWindow);
+
+		glfwTerminate();
+		glfwSetErrorCallback(null).free();
 	}
 
 	public void Init(int width, int height, String title){
@@ -71,6 +100,8 @@ public class Window {
 		//!IMPORTANT
 		GL.createCapabilities();
 
+		Draw.CompileShaders();
+
 	}
 	public void Loop(){
 		while(!glfwWindowShouldClose(glfwWindow)){
@@ -79,6 +110,8 @@ public class Window {
 
 			glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // color del fondo
 			glClear(GL_COLOR_BUFFER_BIT);
+
+			Draw.DrawTest();
 
 			glfwSwapBuffers(glfwWindow);
 		}
