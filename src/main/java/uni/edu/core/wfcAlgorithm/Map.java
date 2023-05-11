@@ -63,7 +63,7 @@ public class Map {
 	 */
 	public void generateMap(long... _seed){
 		//-comprobacion de la semilla
-		long seed = _seed.length > 0? _seed[0] : System.currentTimeMillis();
+		long seed = _seed != null? _seed[0] : System.currentTimeMillis();
 		Random randomGenerator = new Random(seed);
 		//-mapa provisional
 		generateRooms();

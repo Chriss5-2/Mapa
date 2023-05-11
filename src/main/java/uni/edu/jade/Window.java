@@ -42,7 +42,7 @@ public class Window {
 	private static Window window = null;
 
 	private Window(){
-		//map = Map.Get();
+		map = Map.Get();
 		this.width = 1280;
 		this.height = 720;
 		this.tittle = "Map generation";
@@ -69,6 +69,9 @@ public class Window {
 	}
 
 	public void Init(int width, int height, String title){
+
+		map.generateMap(null);
+		map.PrintMap();
 		//Error callback
 		GLFWErrorCallback.createPrint(System.err).set();
 
@@ -99,8 +102,12 @@ public class Window {
 		
 		//!IMPORTANT
 		GL.createCapabilities();
-
+		
 		Draw.CompileShaders();
+		Draw.SetMapVAO(map);
+		Draw.SetGridVAO(map.GetCollumns(), map.GetRows());
+
+		System.out.println("VAO terminado!");
 
 	}
 	public void Loop(){
@@ -111,7 +118,8 @@ public class Window {
 			glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // color del fondo
 			glClear(GL_COLOR_BUFFER_BIT);
 
-			Draw.DrawTest();
+			//Draw.DrawTest();
+			Draw.DrawMap(map);
 
 			glfwSwapBuffers(glfwWindow);
 		}

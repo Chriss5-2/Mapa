@@ -24,8 +24,17 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class Shader {
+
+    /**
+     *Shader Identifier
+     */
     private int ID;
 
+    /**
+     * Construcs and compile the shader especified using the vertex path and the fragment path
+     * @param vertexPath
+     * @param fragmentPath
+     */
     public Shader(String vertexPath, String fragmentPath){
         String vertexCode = "";
         String fragmentCode = "";
@@ -93,6 +102,7 @@ public class Shader {
         System.out.println("Shader compilado!");
 
     }
+    
     void Use(){
         glUseProgram(ID);
     }
