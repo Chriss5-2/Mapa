@@ -65,16 +65,16 @@ public class Map {
 		//-comprobacion de la semilla
 		long seed = _seed != null? _seed[0] : System.currentTimeMillis();
 		Random randomGenerator = new Random(seed);
-		//-mapa provisional
+
+		//-mapa de celdas
 		generateRooms();
 
 		Room selectedRoom;
 
-		//-1 conseguir la celda con menor entropia
 		selectedRoom = GetMinorEntropyRoom();
 
-		
 		do{
+
 			//-2 colapsar la celda escogida
 			boolean collapsedState = selectedRoom.Collapse(
 				randomGenerator.nextBoolean(), 
@@ -92,8 +92,7 @@ public class Map {
 			//-marcar todos como no revisados y volver a empezar
 			UncheckRooms();
 
-			//System.out.println();
-
+			//-1 conseguir la celda con menor entropia
 			selectedRoom = GetMinorEntropyRoom();
 		}
 		while(selectedRoom != null);
@@ -113,16 +112,16 @@ public class Map {
 
 	@SuppressWarnings("unchecked")
 	private Room GetMinorEntropyRoom() {
+
 		// -1 hacer un clon de la lista
 		ArrayList<Room> clonList = (ArrayList<Room>) rooms.clone();
+
 		// -2 filtrar los no colapsados y ordenar por entropia (menor a mayor)
 		clonList.removeIf((r) -> (r.IsCollapsed()));
 		clonList.sort((r1, r2) -> {
-			if (r1.GetEntropy() > r2.GetEntropy())
-				return 1; // busca el menor
-			else
-				return -1;
+			return (r1.GetEntropy() > r2.GetEntropy())? 1: -1; //busca al menor
 		});
+
 		// -3 devolver el primer elemento
 		if (clonList.size() > 0) {
 			return clonList.get(0);
@@ -132,9 +131,12 @@ public class Map {
 
 	@SuppressWarnings("unchecked")
 	private ArrayList<Room> GetSurrounding(){
+
 		ArrayList<Room> surrounding = (ArrayList<Room>) rooms.clone();
+
 		surrounding.removeIf((r) -> r.IsCollapsed());
-		surrounding.removeIf((r) -> r.GetEntropy() == 3);
+		surrounding.removeIf((r) -> r.GetEntropy() == 3); //remueve celdas con entropia 
+
 		return surrounding;
 	}
 
@@ -153,22 +155,14 @@ public class Map {
 
 	private void NotifyNeighbours(Room room, boolean collapsedState) {
 		HashSet<Room> cells = new HashSet<>();
-		//TODO: buscar mejor forma de implementar esto
 		//- notificar alrededor: Vecinos - vecinos nulos/colapsados + celdas con entropia < 3
 
 		cells.addAll(room.GetNeighbours());
 		cells.addAll(GetSurrounding());
+
 		cells.removeIf((r -> r==null));
 		cells.removeIf((r -> r.IsCollapsed()));
-		// if (collapsedState) {
-		//     neighbours.forEach((r) -> {
-		//         r.IncrementRoomsArround();
-		//     });
-		// } else {
-		//     neighbours.forEach((r) -> {
-		//         r.IncrementVoidArround();
-		//     });
-		// }
+
 		cells.forEach((r) -> {
 			r.Notify();
 		});

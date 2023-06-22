@@ -4,6 +4,11 @@ import java.util.ArrayList;
 
 public class Room {
 
+	/**
+	 *Estado al que ah colapsado una celda <p>
+	 * <strong>true: </strong> Habitacion <p>
+	 * <strong>false:</strong> Vacio (Void)
+	 */
 	private boolean state;
 	private int positionX;
 	private int positionY;
@@ -12,6 +17,7 @@ public class Room {
 	private boolean collapsed;
 
 	private int entropy;
+
 	private Integer valueToCollapse;
 
 	public Room(int x, int y){
@@ -41,8 +47,8 @@ public class Room {
 		this.state = state;
 		return state;
 	}
+
 	public void Notify(){
-		//- todo esto esta mal
 		//debo revisar a los vecinos y determinar segun estos si se requiere un colapso
 		//las celdas no colapsadas influyen en el calculo de la entropia?
 		ArrayList<Room> neighbours = this.GetNeighbours();
@@ -60,7 +66,11 @@ public class Room {
 		checked = true;
 	}
 
-	// entropy, room
+	/**
+	 * @return
+	 * <p>valor de la entropia en el <strong>index 0</strong> </p>
+	 * <p>valor al que deberia colapsar la habitacion en el <strong> index 1 </strong>
+	 */
 	private ArrayList<Integer> CheckConditions(){
 		ArrayList<Integer> output = new ArrayList<>();
 		Integer entropy = 2;
@@ -78,7 +88,7 @@ public class Room {
 			if(r.state) roomArround++;
 			else voidArround++;
 		}
-		//revision de estados por cantidad al rededor de una habitacion
+		//-revision de estados por cantidad alrededor de una habitacion
 		if(this.state == true){
 			if(noNullArround - voidArround == 1){
 				entropy = 1;
